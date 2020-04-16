@@ -1,0 +1,44 @@
+def create_title(agent, user, listing, tour)
+        agent_name = agent.first_name
+         # if tour is draft/terminal_draft/requested then set to string otherwise keep empty string.
+        pending = tour_pending?(tour) ? "PENDING - " : ''
+"#{pending} #{agent_name} @ #{user.first_name} #{user.last_name} Tour (#{listing.present? ? listing.neighborhood : tour.listing_address}): #{tour.tour_type.display_name}"
+      end
+      
+      
+      
+      
+      
+
+      def create_description(_expert, client, listing, tour)
+        %(Tour Start Time: #{tour.scheduled_time ? tour_time_with_zone(tour) : 'N/A'}
+#{tour.tour_note}
+
+Tour Type: #{tour.tour_type.display_name}
+
+Lyft Client: #{tour.lyft_ride ? 'Yes' : 'No'}
+
+#{listing.present? ? listing.full_address : tour.listing_address}
+MLS#: #{listing.present? ? listing.mls_num : tour.listing_mls_num}
+
+LA: #{listing&.member&.name} - #{listing&.member&.phone || 'No Phone#'}
+
+Agent Remarks:
+#{extract_remarks(listing)}
+
+Feedback Form: #{FEEDBACK_URL}
+
+Please upload a geo-tagged photo of the front exterior of the home:
+http://bit.ly/FlyhomesGeo-TaggedPhotosUpload
+
+--
+
+Client Name(s): #{client.name} #{client.connected_lead.present? ? ',' + client.connected_lead.name : ''}
+Client #: #{client.phone}
+Client Advisor: #{client&.expert&.name || 'TBD'} - #{client&.expert&.phone || 'N/A'}
+
+Client Bio:
+#{client.bio || 'N/A'}
+
+How many offers has the client made: #{client.offers_count})
+      end
